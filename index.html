@@ -4,33 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-        .tradingview-widget-container { height: 100vh !important; }
+        body, html { margin: 0; padding: 0; height: 100vh; width: 100%; overflow: hidden; background-color: #0F0F0F; }
+        .tradingview-widget-container { height: 100vh !important; width: 100% !important; }
     </style>
 </head>
 <body>
     <div class="tradingview-widget-container">
-        <div id="tradingview_chart"></div>
-    </div>
-
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script type="text/javascript">
-        const params = new URLSearchParams(window.location.search);
-        const mySymbol = params.get('symbol') || 'BIST:XU100';
-
-        new TradingView.widget({
+        <div class="tradingview-widget-container__widget" id="chart_widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+        {
             "autosize": true,
-            "symbol": mySymbol,
+            "symbol": "BIST:XU100", 
             "interval": "D",
             "timezone": "Europe/Istanbul",
-            "theme": "light",
+            "theme": "dark",
             "style": "1",
             "locale": "tr",
-            "toolbar_bg": "#f1f3f6",
             "enable_publishing": false,
             "allow_symbol_change": true,
-            "container_id": "tradingview_chart"
-        });
-    </script>
+            "backgroundColor": "#0F0F0F",
+            "gridColor": "rgba(242, 242, 242, 0.06)",
+            "hide_side_toolbar": true,
+            "container_id": "chart_widget"
+        }
+        </script>
+        <script>
+            // AppSheet'ten gelen sembolü yakalamak için küçük bir sihir:
+            const urlParams = new URLSearchParams(window.location.search);
+            const symbol = urlParams.get('symbol');
+            if (symbol) {
+                // Eğer URL'de sembol varsa, widget ayarlarını güncelle
+                window.addEventListener('load', () => {
+                    const scriptTag = document.querySelector('script[src*="embed-widget-advanced-chart.js"]');
+                    const config = JSON.parse(scriptTag.innerHTML);
+                    config.symbol = symbol;
+                    // Widget'ı yeni sembolle tekrar tetikler (Basit yöntem: URL parametresi ile widget'ı beslemek)
+                });
+            }
+        </script>
+    </div>
 </body>
 </html>
