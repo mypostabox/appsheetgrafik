@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: transparent; }
+        #widget-container { width: 100%; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="widget-container"></div>
+
+    <script type="module" src="https://widgets.tradingview-widget.com/w/tr/tv-mini-chart.js"></script>
+    <script>
+        // URL'den parametre al: ?symbol=BIST:ASTOR
+        const params = new URLSearchParams(window.location.search);
+        const mySymbol = params.get('symbol') || 'BIST:XU100';
+
+        const container = document.getElementById('widget-container');
+        container.innerHTML = `
+            <tv-mini-chart 
+                symbol="${mySymbol}" 
+                width="100%" 
+                height="100%"
+                locale="tr"
+                dateRange="1M"
+                colorTheme="light"
+                trendLineColor="#37a6ef"
+                underLineColor="#E3F2FD"
+                isTransparent="true"
+                autosize="true"
+            ></tv-mini-chart>`;
+    </script>
+</body>
+</html>
